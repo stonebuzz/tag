@@ -41,30 +41,29 @@ jobs:
 
       #####################################################################################
       ## Extract some variables                                                          ##
-      ## repo_name          -> plugin repo name (to UPPER CASE)             ex : TAG     ##
+      ## REPO_NAME          -> plugin repo name (to UPPER CASE)             ex : TAG     ##
       ## tag_name           -> tag name                                     ex : 2.1.2   ##
       ## plugin_version     -> current plugin version define in 'setup.php' ex : 2.1.0   ##
       ## min_glpi_version   -> min glpi version define in 'setup.php'       ex : 10.0.0  ##
       ## max_glpi_version   -> max glpi version define in 'setup.php'       ex : 10.0.99 ##
       #####################################################################################
       - name: Extract needed env variables
-        uses: ASzc/change-string-case-action@v5
         run: |
-             echo "repo_name=${{ github.event.repository.name.uppercase }}" >> $GITHUB_ENV
+             echo "REPO_NAME=${{ github.event.repository.name }}" | tr '[:lower:]' '[:upper:]' >> $GITHUB_ENV
              echo "tag_name=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-             echo "plugin_version=$(grep -oP 'define\("PLUGIN_'${{ env.repo_name }}'_VERSION", "\K[^"]+' setup.php)" >> $GITHUB_ENV
-             echo "min_glpi_version=$(grep -oP 'define\("PLUGIN_'${{ env.repo_name }}'_MIN_GLPI", "\K[^"]+' setup.php)" >> $GITHUB_ENV
-             echo "max_glpi_version=$(grep -oP 'define\("PLUGIN_'${{ env.repo_name }}'_MAX_GLPI", "\K[^"]+' setup.php)" >> $GITHUB_ENV
+             echo "plugin_version=$(grep -oP 'define\("PLUGIN_'${{ env.REPO_NAME }}'_VERSION", "\K[^"]+' setup.php)" >> $GITHUB_ENV
+             echo "min_glpi_version=$(grep -oP 'define\("PLUGIN_'${{ env.REPO_NAME }}'_MIN_GLPI", "\K[^"]+' setup.php)" >> $GITHUB_ENV
+             echo "max_glpi_version=$(grep -oP 'define\("PLUGIN_'${{ env.REPO_NAME }}'_MAX_GLPI", "\K[^"]+' setup.php)" >> $GITHUB_ENV
 
       - name: Show env variables
         run: echo ${{ env }}
 
       #####################################################################################
       ## Replaces the plugin constant that defines this version                          ##
-      ## define('PLUGIN_${{ env.repo_name }}_VERSION', '${{ env.tag_name }}');           ##
+      ## define('PLUGIN_${{ env.REPO_NAME }}_VERSION', '${{ env.tag_name }}');           ##
       #####################################################################################
       - name: Update setup.php
-        run: sed -i "s/define('PLUGIN_${{ env.repo_name }}_VERSION', ''${{ env.plugin_version }}'');/define('PLUGIN_${{ env.repo_name }}_VERSION', '${{ env.tag_name }}');/g" setup.php
+        run: sed -i "s/define('PLUGIN_${{ env.REPO_NAME }}_VERSION', ''${{ env.plugin_version }}'');/define('PLUGIN_${{ env.REPO_NAME }}_VERSION', '${{ env.tag_name }}');/g" setup.php
 
       ###################################################################################################################################################################################################################
       ## Update the plugin.xml file to add new version                                                                                                                                                                 ##
@@ -77,7 +76,7 @@ jobs:
       - name: Update plugin.xml
         uses: Mudlet/xmlstarlet-action@master
         with:
-          args: >
+          args: > #replace carriage return by space
                 ed --omit-decl -P -L -i "//versions//version[1]" -t elem -n "version"
                 -s "//versions/version[1]" -t elem -n "num" -v "${{ env.tag_name }}"
                 -s "//versions/version[1]" -t elem -n "compatibility" -v "<![CDATA[>=${{ env.min_glpi_version }} <=${{ env.max_glpi_version }}]]>"
