@@ -40,10 +40,7 @@ jobs:
           dev: no
 
       - name: Extract Current Repo Name
-        run: echo "repo_name=${{ github.event.repository.name }}" >> $GITHUB_ENV
-
-      - name: Set repo name in upper case
-        run: echo "repo_name=$(echo $repo_name | tr '[:lower:]' '[:upper:]')" >> $GITHUB_ENV
+        run: echo "repo_name=${{ github.event.repository.name }} | tr '[:lower:]' '[:upper:]'" >> $GITHUB_ENV
 
       - name: "Extract Current Tag Name"
         run: echo "tag_name=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
@@ -63,8 +60,6 @@ jobs:
       - name: Bump plugin version
         run: sed -i "s/define('PLUGIN_${{ env.repo_name }}_VERSION', ''${{ env.plugin_version }}'');/define('PLUGIN_${{ env.repo_name }}_VERSION', '${{ env.tag_name }}');/g" setup.php
 
-      - name: see changes
-        run: git diff
 
   create-release:
     name: "Create release"
