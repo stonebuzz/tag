@@ -40,7 +40,7 @@ jobs:
           dev: no
 
       - name: Extract Current Repo Name
-        run: echo "repo_name=${{ github.event.repository.name^^ }}" >> $GITHUB_ENV
+        run: echo "repo_name=${{ github.event.repository.name }}" >> $GITHUB_ENV
 
       - name: "Extract Current Tag Name"
         run: echo "tag_name=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
