@@ -39,26 +39,29 @@ jobs:
         with:
           dev: no
 
-      - name: Extract Current Repo Name
-        run: echo "repo_name=${{ github.event.repository.name }}" | tr '[:lower:]' '[:upper:]' >> $GITHUB_ENV
-
-      - name: "Extract Current Tag Name"
-        run: echo "tag_name=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-
-      - name: "Extract Current Version"
-        run: echo "plugin_version=$(grep -oP 'define\("PLUGIN_${{ env.repo_name }}_VERSION", "\K[^"]+' setup.php)" >> $GITHUB_ENV
-
-      - name: Extract MIN GLPI VERSION
-        run: echo "min_glpi_version=$(grep -oP 'define\("PLUGIN_${{ env.repo_name }}_MIN_GLPI", "\K[^"]+' setup.php)" >> $GITHUB_ENV
-
-      - name: Extract MAX GLPI VERSION
-        run: echo "max_glpi_version=$(grep -oP 'define\("PLUGIN_${{ env.repo_name }}_MAX_GLPI", "\K[^"]+' setup.php)" >> $GITHUB_ENV
+      - name: Extract needed env variables
+        run: |
+             echo "repo_name=${{ github.event.repository.name }}" | tr '[:lower:]' '[:upper:]' >> $GITHUB_ENV
+             echo "tag_name=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+             echo "plugin_version=$(grep -oP 'define\("PLUGIN_${{ env.repo_name }}_VERSION", "\K[^"]+' setup.php)" >> $GITHUB_ENV
+             echo "min_glpi_version=$(grep -oP 'define\("PLUGIN_${{ env.repo_name }}_MIN_GLPI", "\K[^"]+' setup.php)" >> $GITHUB_ENV
+             echo "max_glpi_version=$(grep -oP 'define\("PLUGIN_${{ env.repo_name }}_MAX_GLPI", "\K[^"]+' setup.php)" >> $GITHUB_ENV
 
       - name: Show env variables
         run: echo ${{ env }}
 
-      - name: Bump plugin version
+      - name: Update setup.php
         run: sed -i "s/define('PLUGIN_${{ env.repo_name }}_VERSION', ''${{ env.plugin_version }}'');/define('PLUGIN_${{ env.repo_name }}_VERSION', '${{ env.tag_name }}');/g" setup.php
+
+      - name: Update plugin.xml
+        uses: Mudlet/xmlstarlet-action@master
+        with:
+          args: ed --omit-decl -P -L  \
+-s '//versions' -t elem -n "version" \
+-s '//versions/version[first()]' -t attr -n "num" -v "${{ env.tag_name }}" \
+-s '//versions/version[first()]' -t attr -n "compatibility" -v ">=${{ env.min_glpi_version }} <=${{ env.max_glpi_version }}" \
+-s '//versions/version[first()]' -t attr -n "download_url" -v "https://github.com/pluginsGLPI/tag/releases/download/${{ env.tag_name }}/glpi-tag-${{ env.tag_name }}.tar.bz2" \
+plugin.xml
 
 
   create-release:
