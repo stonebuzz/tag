@@ -1,6 +1,10 @@
 name: "Plugin release"
 
 on:
+  workflow_run:
+    workflows: ["Continuous integration"]
+    types:
+      - completed
   push:
     tags:
        - '*'
