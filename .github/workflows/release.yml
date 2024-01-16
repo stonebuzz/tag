@@ -6,20 +6,58 @@ on:
        - '*'
 
 jobs:
+  bump-version:
+    name: "Bump version"
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: develop
+          fetch-depth: 0 #To Fetch All Tags and Branches
+
+      - name: Install Dependencies
+        uses: php-actions/composer@v6
+        with:
+          dev: no
+
+      - name: Extract Current Repo Name
+        run: |
+             echo "repo_name=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
+             echo ${{ env.repo_name }}
+
+      - name: "Extract Current Tag Name"
+        run: |
+             echo "tag_name=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+             echo ${{ env.tag_name }}
+
+      - name: Extract MIN GLPI VERSION
+        run: |
+             echo "min_glpi_version=$(grep -oP 'define\("PLUGIN_TAG_MIN_GLPI", "\K[^"]+' setup.php)" >> $GITHUB_ENV
+             echo ${{ env.min_glpi_version }}
+
+      - name: Extract MAX GLPI VERSION
+        run: |
+             echo "max_glpi_version=$(grep -oP 'define\("PLUGIN_TAG_MAX_GLPI", "\K[^"]+' setup.php)" >> $GITHUB_ENV
+             echo ${{ env.max_glpi_version }}
+
+
   create-release:
     name: "Create release"
     runs-on: "ubuntu-latest"
     steps:
-      - name: "Extract tag name"
-        run: |
-          echo "tag_name=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - name: "Extract Current Tag Name"
+        run: echo "tag_name=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
       - name: "Checkout"
         uses: "actions/checkout@v4"
+
       - name: "Build package"
         id: "build-package"
         uses: "glpi-project/tools/github-actions/build-package@0.7.1"
         with:
           plugin-version: ${{ env.tag_name }}
+
       - name: "Create release"
         id: "create-release"
         uses: "actions/create-release@v1"
@@ -29,6 +67,7 @@ jobs:
           tag_name: ${{ env.tag_name }}
           release_name: ${{ env.tag_name }}
           draft: true
+
       - name: "Attach package to release"
         uses: "actions/upload-release-asset@v1"
         env:
