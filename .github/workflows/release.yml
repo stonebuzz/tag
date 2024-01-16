@@ -79,7 +79,7 @@ jobs:
           args: >
                 ed --omit-decl -P -L -i '//versions//version[1]' -t elem -n "version"
                 -s '//versions/version[1]' -t elem -n "num" -v "${{ env.tag_name }}"
-                -s '//versions/version[1]' -t elem -n "compatibility" -v ">=${{ env.min_glpi_version }} <=${{ env.max_glpi_version }}"
+                -s '//versions/version[1]' -t elem -n "compatibility" -v ">= ${{ env.min_glpi_version }} <= ${{ env.max_glpi_version }}"
                 -s '//versions/version[1]' -t elem -n "download_url" -v "https://github.com/pluginsGLPI/${{ github.event.repository.name }}/releases/download/${{ env.tag_name }}/glpi-${{ github.event.repository.name }}-${{ env.tag_name }}.tar.bz2" plugin.xml
 
       #####################################################################################
