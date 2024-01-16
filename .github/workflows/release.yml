@@ -51,9 +51,9 @@ jobs:
         run: |
              echo "REPO_NAME=${{ github.event.repository.name }}" | tr '[:lower:]' '[:upper:]' >> $GITHUB_ENV
              echo "tag_name=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-             echo "plugin_version=$(grep -oP "define\s*\(\s*['\"]PLUGIN_${{ env.REPO_NAME }}_VERSION['\"]\s*,\s*['\"]?\K[^'\"]+" setup.php)" >> $GITHUB_ENV
-             echo "min_glpi_version=$(grep -oP "define\s*\(\s*['\"]PLUGIN_${{ env.REPO_NAME }}_MIN_GLPI['\"]\s*,\s*['\"]?\K[^'\"]+" setup.php)" >> $GITHUB_ENV
-             echo "max_glpi_version=$(grep -oP "define\s*\(\s*['\"]PLUGIN_${{ env.REPO_NAME }}_MAX_GLPI['\"]\s*,\s*['\"]?\K[^'\"]+" setup.php)" >> $GITHUB_ENV
+             echo "plugin_version=$(grep -oP "(?i)define\s*\(\s*['\"]PLUGIN_${{ github.event.repository.name }}_VERSION['\"]\s*,\s*['\"]?\K[^'\"]+" setup.php)" >> $GITHUB_ENV
+             echo "min_glpi_version=$(grep -oP "(?i)define\s*\(\s*['\"]PLUGIN_${{ github.event.repository.name }}_MIN_GLPI['\"]\s*,\s*['\"]?\K[^'\"]+" setup.php)" >> $GITHUB_ENV
+             echo "max_glpi_version=$(grep -oP "(?i)define\s*\(\s*['\"]PLUGIN_${{ github.event.repository.name }}_MAX_GLPI['\"]\s*,\s*['\"]?\K[^'\"]+" setup.php)" >> $GITHUB_ENV
 
       - name: Show env variables
         run: echo ${{ env }}
