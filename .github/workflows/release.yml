@@ -56,12 +56,12 @@ jobs:
       - name: Update plugin.xml
         uses: Mudlet/xmlstarlet-action@master
         with:
-          args: ed --omit-decl -P -L  \
--s '//versions' -t elem -n "version" \
--s '//versions/version[first()]' -t attr -n "num" -v "${{ env.tag_name }}" \
--s '//versions/version[first()]' -t attr -n "compatibility" -v ">=${{ env.min_glpi_version }} <=${{ env.max_glpi_version }}" \
--s '//versions/version[first()]' -t attr -n "download_url" -v "https://github.com/pluginsGLPI/tag/releases/download/${{ env.tag_name }}/glpi-tag-${{ env.tag_name }}.tar.bz2" \
-plugin.xml
+          args: |
+                ed --omit-decl -P -L  \
+                -s '//versions' -t elem -n "version" \
+                -s '//versions/version[first()]' -t attr -n "num" -v "${{ env.tag_name }}" \
+                -s '//versions/version[first()]' -t attr -n "compatibility" -v ">=${{ env.min_glpi_version }} <=${{ env.max_glpi_version }}" \
+                -s '//versions/version[first()]' -t attr -n "download_url" -v "https://github.com/pluginsGLPI/tag/releases/download/${{ env.tag_name }}/glpi-tag-${{ env.tag_name }}.tar.bz2" plugin.xml
 
 
   create-release:
