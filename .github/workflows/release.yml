@@ -6,10 +6,28 @@ on:
        - '*'
 
 jobs:
+  continuous-integration:
+    name: "GLPI ${{ matrix.glpi-version }} - php:${{ matrix.php-version }} - ${{ matrix.db-image }}"
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {glpi-version: "10.0.x", php-version: "7.4", db-image: "mysql:5.7"}
+          - {glpi-version: "10.0.x", php-version: "8.0", db-image: "mysql:8.0"}
+          - {glpi-version: "10.0.x", php-version: "8.1", db-image: "mariadb:10.2"}
+          - {glpi-version: "10.0.x", php-version: "8.2", db-image: "mariadb:11.0"}
+          - {glpi-version: "10.0.x", php-version: "8.3-rc", db-image: "mysql:8.0"}
+    uses: "glpi-project/plugin-ci-workflows/.github/workflows/continuous-integration.yml@v1"
+    with:
+      plugin-key: "tag"
+      glpi-version: "${{ matrix.glpi-version }}"
+      php-version: "${{ matrix.php-version }}"
+      db-image: "${{ matrix.db-image }}"
+
   bump-version:
     name: "Bump version"
-    needs: Continuous integration
     runs-on: "ubuntu-latest"
+    needs: continuous-integration
     steps:
       - uses: actions/checkout@v3
         with:
