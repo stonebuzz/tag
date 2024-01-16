@@ -1,10 +1,6 @@
 name: "Plugin release"
 
 on:
-  workflow_run:
-    workflows: ["Continuous integration"]
-    types:
-      - completed
   push:
     tags:
        - '*'
@@ -12,6 +8,7 @@ on:
 jobs:
   bump-version:
     name: "Bump version"
+    needs: Continuous integration
     runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v3
@@ -39,15 +36,10 @@ jobs:
       - name: Show env variables
         run: echo ${{ env }}
 
-      - name: Run SUCCESS script
-        run: echo Error
-
-
   create-release:
     name: "Create release"
     runs-on: "ubuntu-latest"
-    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
-    needs: [bump-version]
+    needs: bump-version
     steps:
       - name: "Extract Current Tag Name"
         run: echo "tag_name=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
