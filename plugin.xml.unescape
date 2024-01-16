@@ -6,22 +6,22 @@
    <description>
       <short>
          <fr>Ajout de tags sur n'importe quel objet de GLPI</fr>
-         <cs>P&#x159;id&#xE1;n&#xED; &#x161;t&#xED;tku k libovoln&#xE9;mu objektu v GLPI</cs>
+         <cs>P&#x159;idání &#x161;títku k libovolnému objektu v GLPI</cs>
       </short>
       <long>
          <fr>
-* Ajout de "tags" &#xE0; n'importe quel objet de GLPI (&#xE9;tendant CommonDBTM).
-* Les tags sont administrables dans les intitul&#xE9;s.
-* Les tags sont visibles et modifiables en ent&#xEA;te de l'objet (en dessous du titre).
-* Les tags peuvent &#xEA;tre recherch&#xE9;s et visualis&#xE9;s dans les listes d'objets.
-* Dans l'administration on peut visualiser un rapport des objets associ&#xE9;s.
+* Ajout de "tags" à n'importe quel objet de GLPI (étendant CommonDBTM).
+* Les tags sont administrables dans les intitulés.
+* Les tags sont visibles et modifiables en entête de l'objet (en dessous du titre).
+* Les tags peuvent être recherchés et visualisés dans les listes d'objets.
+* Dans l'administration on peut visualiser un rapport des objets associés.
          </fr>
          <cs>
-* P&#x159;&#xED;d&#xE1;n&#xED; &#x201E;&#x160;t&#xED;tk&#x16F;&#x201C; k libovoln&#xE9;mu objektu v GLPI (roz&#x161;&#xED;&#x159;en&#xED; CommonDBTM).
-* &#x160;t&#xED;tky je mo&#x17E;n&#xE9; spravovat v titulc&#xED;ch.
-* &#x160;t&#xED;tky jsou viditeln&#xE9; a upraviteln&#xE9; v hlavi&#x10D;ce objektu (pod n&#xE1;zvem).
-* &#x160;t&#xED;tky lze vyhled&#xE1;vat a prohl&#xED;&#x17E;et v seznamu objekt&#x16F;.
-* Ve spr&#xE1;v&#x11B; je mo&#x17E;n&#xE9; zobrazit v&#xFD;kaz o souvisej&#xED;c&#xED;ch objektech.
+* P&#x159;ídání &#x201E;&#x160;títk&#x16F;&#x201C; k libovolnému objektu v GLPI (roz&#x161;í&#x159;ení CommonDBTM).
+* &#x160;títky je mo&#x17E;né spravovat v titulcích.
+* &#x160;títky jsou viditelné a upravitelné v hlavi&#x10D;ce objektu (pod názvem).
+* &#x160;títky lze vyhledávat a prohlí&#x17E;et v seznamu objekt&#x16F;.
+* Ve správ&#x11B; je mo&#x17E;né zobrazit výkaz o souvisejících objektech.
          </cs>
       </long>
    </description>
@@ -33,7 +33,7 @@
       <author>TECLIB'</author>
    </authors>
    <versions>
-      <version><num>3.2.2</num><compatibility>&gt;=10.0.0 &lt;=10.0.99</compatibility><download_url>https://github.com/pluginsGLPI/tag/releases/download/2.11.7/glpi-tag-3.2.2.tar.bz2</download_url></version><version>
+      <version><num>3.2.2</num><compatibility>>=10.0.0 <=10.0.99</compatibility><download_url>https://github.com/pluginsGLPI/tag/releases/download/2.11.7/glpi-tag-3.2.2.tar.bz2</download_url></version><version>
          <num>2.11.7</num>
          <compatibility>~10.0.0</compatibility>
          <download_url>https://github.com/pluginsGLPI/tag/releases/download/2.11.7/glpi-tag-2.11.7.tar.bz2</download_url>
@@ -214,7 +214,7 @@
       <fr>
          <tag>Tag</tag>
          <tag>Etiquettes</tag>
-         <tag>Intitul&#xE9;s</tag>
+         <tag>Intitulés</tag>
          <tag>Inventaire</tag>
          <tag>Gestion</tag>
          <tag>Ticket</tag>
@@ -228,7 +228,7 @@
          <tag>User</tag>
       </en>
       <cs>
-         <tag>&#x160;t&#xED;tek</tag>
+         <tag>&#x160;títek</tag>
          <tag>Po&#x17E;adavek</tag>
          <tag>Barva</tag>
          <tag>U&#x17E;ivatel</tag>

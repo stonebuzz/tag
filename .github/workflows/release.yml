@@ -39,6 +39,14 @@ jobs:
         with:
           dev: no
 
+      #####################################################################################
+      ## Extract some variables                                                          ##
+      ## repo_name          -> plugin repo name (to UPPER CASE)             ex : TAG     ##
+      ## tag_name           -> tag name                                     ex : 2.1.2   ##
+      ## plugin_version     -> current plugin version define in 'setup.php' ex : 2.1.0   ##
+      ## min_glpi_version   -> min glpi version define in 'setup.php'       ex : 10.0.0  ##
+      ## max_glpi_version   -> max glpi version define in 'setup.php'       ex : 10.0.99 ##
+      #####################################################################################
       - name: Extract needed env variables
         run: |
              echo "repo_name=${{ github.event.repository.name }}" | tr '[:lower:]' '[:upper:]' >> $GITHUB_ENV
@@ -50,19 +58,31 @@ jobs:
       - name: Show env variables
         run: echo ${{ env }}
 
+      #####################################################################################
+      ## Replaces the plugin constant that defines this version                          ##
+      ## define('PLUGIN_${{ env.repo_name }}_VERSION', '${{ env.tag_name }}');           ##
+      #####################################################################################
       - name: Update setup.php
         run: sed -i "s/define('PLUGIN_${{ env.repo_name }}_VERSION', ''${{ env.plugin_version }}'');/define('PLUGIN_${{ env.repo_name }}_VERSION', '${{ env.tag_name }}');/g" setup.php
 
+      ###################################################################################################################################################################################################################
+      ## Update the plugin.xml file to add new version                                                                                                                                                                 ##
+      ## <version>                                                                                                                                                                                                     ##
+      ##    <num>${{ env.tag_name }}</num>                                                                                                                                                                             ##
+      ##    <compatibility>>=${{ env.min_glpi_version }} <=${{ env.max_glpi_version }}</compatibility>                                                                                                                 ##
+      ##    <download_url>https://github.com/pluginsGLPI/${{ github.event.repository.name }}/releases/download/${{ env.tag_name }}/glpi-${{ github.event.repository.name }}-${{ env.tag_name }}.tar.bz2</download_url> ##
+      ## </version>                                                                                                                                                                                                    ##
+      ###################################################################################################################################################################################################################
       - name: Update plugin.xml
         uses: Mudlet/xmlstarlet-action@master
         with:
           args: >
                 ed --omit-decl -P -L -i '//versions//version[1]' -t elem -n "version"
                 -s '//versions/version[1]' -t elem -n "num" -v "${{ env.tag_name }}"
-                -s '//versions/v-ersion[1]' -t elem -n "compatibility" -v "&gt;=${{ env.min_glpi_version }} &lt;=${{ env.max_glpi_version }}"
+                -s '//versions/v-ersion[1]' -t elem -n "compatibility" -v "<![CDATA[>=${{ env.min_glpi_version }} <=${{ env.max_glpi_version }}]]>"
                 -s '//versions/version[1]' -t elem -n "download_url" -v "https://github.com/pluginsGLPI/${{ github.event.repository.name }}/releases/download/${{ env.tag_name }}/glpi-${{ github.event.repository.name }}-${{ env.tag_name }}.tar.bz2" plugin.xml
 
-      - name: Clean up
+      - name: Format and clean up
         uses: Mudlet/xmlstarlet-action@master
         with:
           args: |
