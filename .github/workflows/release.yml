@@ -63,7 +63,10 @@ jobs:
       ## define('PLUGIN_${{ env.REPO_NAME }}_VERSION', '${{ env.tag_name }}');           ##
       #####################################################################################
       - name: Update setup.php
-        run: sed -i "s/define('PLUGIN_${{ env.REPO_NAME }}_VERSION', ''${{ env.plugin_version }}'');/define('PLUGIN_${{ env.REPO_NAME }}_VERSION', '${{ env.tag_name }}');/g" setup.php
+        run: sed -i "s/define('PLUGIN_${{ env.REPO_NAME }}_VERSION', '${{ env.plugin_version }}');/define('PLUGIN_${{ env.REPO_NAME }}_VERSION', '${{ env.tag_name }}');/g" setup.php
+
+      - name: cat setup.php
+        run: cat setup.php
 
       ###################################################################################################################################################################################################################
       ## Update the plugin.xml file to add new version                                                                                                                                                                 ##
@@ -102,8 +105,6 @@ jobs:
       - name: cat plugin.xml
         run: cat plugin.xml
 
-      - name: cat setup.php
-        run: cat setup.php
 
 
   create-release:
