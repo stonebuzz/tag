@@ -79,21 +79,25 @@ jobs:
           args: >
                 ed --omit-decl -P -L -i '//versions//version[1]' -t elem -n "version"
                 -s '//versions/version[1]' -t elem -n "num" -v "${{ env.tag_name }}"
-                -s '//versions/v-ersion[1]' -t elem -n "compatibility" -v "<![CDATA[>=${{ env.min_glpi_version }} <=${{ env.max_glpi_version }}]]>"
+                -s '//versions/v-ersion[1]' -t elem -n "compatibility" -v ">=${{ env.min_glpi_version }} <=${{ env.max_glpi_version }}>"
                 -s '//versions/version[1]' -t elem -n "download_url" -v "https://github.com/pluginsGLPI/${{ github.event.repository.name }}/releases/download/${{ env.tag_name }}/glpi-${{ github.event.repository.name }}-${{ env.tag_name }}.tar.bz2" plugin.xml
 
+      #####################################################################################
+      ## Format 'plugin.xml'                                                             ##
+      ## -o                -> omit xml declaration <?xml version="1.0"?>                 ##
+      ## --indent-spaces 3 -> indent with 3 spaces                                       ##
+      ## -e utf-8          -> encode with utf-8                                          ##
+      #####################################################################################
       - name: Format and clean up
         uses: Mudlet/xmlstarlet-action@master
         with:
           args: |
-                fo -o --indent-spaces 3 plugin.xml > indent.xml
-                fo -o -e utf-8 indent.xml > encode.xml
-                unesc encode.xml > plugin.xml
+                fo -o --indent-spaces 3 -e utf-8 plugin.xml > format.xml
+                unesc format.xml > plugin.xml
 
       - name: Clean up
         run: |
-             rm -fr indent.xml
-             rm -fr encode.xml
+             rm -fr format.xml
 
       - name: cat plugin.xml
         run: cat plugin.xml
