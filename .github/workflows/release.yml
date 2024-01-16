@@ -49,7 +49,7 @@ jobs:
       #####################################################################################
       - name: Extract needed env variables
         run: |
-             echo "repo_name=${{ github.event.repository.name }}" | tr '[:lower:]' '[:upper:]' >> $GITHUB_ENV
+             echo "repo_name=${{ github.event.repository.name.upper }}" >> $GITHUB_ENV
              echo "tag_name=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
              echo "plugin_version=$(grep -oP 'define\("PLUGIN_'${{ env.repo_name }}'_VERSION", "\K[^"]+' setup.php)" >> $GITHUB_ENV
              echo "min_glpi_version=$(grep -oP 'define\("PLUGIN_'${{ env.repo_name }}'_MIN_GLPI", "\K[^"]+' setup.php)" >> $GITHUB_ENV
