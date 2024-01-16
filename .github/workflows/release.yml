@@ -46,12 +46,15 @@ jobs:
         run: echo "tag_name=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - name: Extract MIN GLPI VERSION
-        run: echo "min_glpi_version=$(grep -oP 'define\("PLUGIN_TAG_MIN_GLPI", "\K[^"]+' setup.php)" >> $GITHUB_ENV
+        run: echo "min_glpi_version=$(grep -oP 'define\("PLUGIN_${{ env.tag_name^^ }}_MIN_GLPI", "\K[^"]+' setup.php)" >> $GITHUB_ENV
 
       - name: Extract MAX GLPI VERSION
-        run: echo "max_glpi_version=$(grep -oP 'define\("PLUGIN_TAG_MAX_GLPI", "\K[^"]+' setup.php)" >> $GITHUB_ENV
+        run: echo "max_glpi_version=$(grep -oP 'define\("PLUGIN_${{ env.tag_name^^ }}_MAX_GLPI", "\K[^"]+' setup.php)" >> $GITHUB_ENV
 
       - name: Show env variables
+        run: echo ${{ env }}
+
+      - name: Bump plugin version
         run: echo ${{ env }}
 
   create-release:
