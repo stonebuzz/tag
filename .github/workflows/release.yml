@@ -65,8 +65,6 @@ jobs:
       - name: Update setup.php
         run: sed -i "s/define('PLUGIN_${{ env.REPO_NAME }}_VERSION', '${{ env.plugin_version }}');/define('PLUGIN_${{ env.REPO_NAME }}_VERSION', '${{ env.tag_name }}');/g" setup.php
 
-
-
       ###################################################################################################################################################################################################################
       ## Update the plugin.xml file to add new version                                                                                                                                                                 ##
       ## <version>                                                                                                                                                                                                     ##
@@ -75,7 +73,6 @@ jobs:
       ##    <download_url>https://github.com/pluginsGLPI/${{ github.event.repository.name }}/releases/download/${{ env.tag_name }}/glpi-${{ github.event.repository.name }}-${{ env.tag_name }}.tar.bz2</download_url> ##
       ## </version>                                                                                                                                                                                                    ##
       ###################################################################################################################################################################################################################
-
       - name: Install xmlstarlet
         run: |
              sudo apt-get update
@@ -83,7 +80,7 @@ jobs:
 
       - name: Update plugin.xml
         run: > #replace carriage return by space
-             xmlstarlet ed --omit-decl -P -L -i "//versions//version[1]" -t elem -n "version"
+             xmlstarlet ed -P -L -i "//versions//version[1]" -t elem -n "version"
              -s "//versions/version[1]" -t elem -n "num" -v "${{ env.tag_name }}"
              -s "//versions/version[1]" -t elem -n "compatibility" -v ">=${{ env.min_glpi_version }}<=${{ env.max_glpi_version }}"
              -s "//versions/version[1]" -t elem -n "download_url" -v "https://github.com/pluginsGLPI/${{ github.event.repository.name }}/releases/download/${{ env.tag_name }}/glpi-${{ github.event.repository.name }}-${{ env.tag_name }}.tar.bz2" plugin.xml
