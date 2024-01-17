@@ -99,12 +99,9 @@ jobs:
              git status --porcelain | grep "M setup.php"
 
       - name: Changelog
-          uses: scottbrenner/generate-changelog-action@master
-          id: Changelog
-          with:
-            token: ${{ secrets.GITHUB_TOKEN }}
-            version: ${{ env.tag_name }}
-            #exclude: '^(docs|test|ci|build|release|chore|refactor|style|ci)(\(.+\))?!:'
+        uses: scottbrenner/generate-changelog-action@master
+        id: Changelog
+
 
   create-release:
     name: "Create release"
