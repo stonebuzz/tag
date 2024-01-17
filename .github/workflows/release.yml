@@ -99,10 +99,10 @@ jobs:
              git status --porcelain | grep setup.php
 
   create-changelog:
-    name: "Create release"
+    name: "Create changelog"
     runs-on: "ubuntu-latest"
     needs: bump-version
-     steps:
+    steps:
       - name: Check if files are well updated
         run: |
              git status --porcelain | grep plugin.xml
