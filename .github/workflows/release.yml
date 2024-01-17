@@ -90,13 +90,11 @@ jobs:
 
       #####################################################################################
       ## Format 'plugin.xml'                                                             ##
-      ## --omit-decl       -> omit xml declaration <?xml version="1.0"?>                 ##
       ## --indent-spaces 3 -> indent with 3 spaces                                       ##
       ## --encode utf-8    -> encode with utf-8                                          ##
       #####################################################################################
       - name: Format
-        run: xmlstarlet fo --omit-decl --indent-spaces 3 --encode utf-8 plugin.xml > format.xml
-        continue-on-error: true #because xmlstarlet return 186 or 173 even if it's ok
+        run: xmlstarlet fo --indent-spaces 3 --encode utf-8 plugin.xml > format.xml
 
 
       - name: Clean up
