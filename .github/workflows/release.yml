@@ -77,7 +77,9 @@ jobs:
       ###################################################################################################################################################################################################################
 
       - name: Install xmlstarlet
-        run: sudo apt-get install -y xmstarlet
+        run: |
+             sudo apt-get update
+             sudo apt-get install -y xmstarlet
 
       - name: Update plugin.xml
         run: > #replace carriage return by space
@@ -93,9 +95,7 @@ jobs:
       ## --encode utf-8    -> encode with utf-8                                          ##
       #####################################################################################
       - name: Format
-        uses: Mudlet/xmlstarlet-action@master
-        with:
-          args: xmlstarlet fo --omit-decl --indent-spaces 3 --encode utf-8 plugin.xml > format.xml
+        run: xmlstarlet fo --omit-decl --indent-spaces 3 --encode utf-8 plugin.xml > format.xml
 
 
       - name: Clean up
