@@ -91,13 +91,13 @@ jobs:
       - name: Format
         uses: Mudlet/xmlstarlet-action@master
         with:
-          args: |
-                fo -o --indent-spaces 3 -e utf-8 plugin.xml > format.xml
-                unesc format.xml > plugin.xml
+          args: fo -o --indent-spaces 3 -e utf-8 plugin.xml > format.xml
+
 
       - name: Clean up
         run: |
-             rm -fr format.xml
+             rm -fr plugin.xml
+             mv format.xml plugin.xml
 
       - name: cat plugin.xml
         run: cat plugin.xml
