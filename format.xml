@@ -35,6 +35,11 @@
    </authors>
    <versions>
       <version>
+         <num>3.2.2</num>
+         <compatibility>&gt;=10.0.0 &lt;=10.0.99</compatibility>
+         <download_url>https://github.com/pluginsGLPI/tag/releases/download/2.11.7/glpi-tag-3.2.2.tar.bz2</download_url>
+      </version>
+      <version>
          <num>2.11.7</num>
          <compatibility>~10.0.0</compatibility>
          <download_url>https://github.com/pluginsGLPI/tag/releases/download/2.11.7/glpi-tag-2.11.7.tar.bz2</download_url>
