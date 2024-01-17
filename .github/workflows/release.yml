@@ -34,11 +34,6 @@ jobs:
           ref: main
           fetch-depth: 0 #To Fetch All Tags and Branches
 
-      - name: Install Dependencies
-        uses: php-actions/composer@v6
-        with:
-          dev: no
-
       #####################################################################################
       ## Extract some variables                                                          ##
       ## REPO_NAME          -> plugin repo name (to UPPER CASE)             ex : TAG     ##
@@ -93,15 +88,15 @@ jobs:
       - name: Format
         run: xmlstarlet fo --indent-spaces 3 --encode utf-8 plugin.xml > format.xml
 
-
       - name: Clean up
         run: |
              rm -fr plugin.xml
              mv format.xml plugin.xml
 
-      - name: cat plugin.xml
-        run: cat plugin.xml
-
+      - name: Check if file are updates
+        run: |
+             git status --porcelain | grep plugin.xml
+             git status --porcelain | grep setup.php
 
 
   create-release:
