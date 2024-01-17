@@ -96,6 +96,7 @@ jobs:
       #####################################################################################
       - name: Format
         run: xmlstarlet fo --omit-decl --indent-spaces 3 --encode utf-8 plugin.xml > format.xml
+        continue-on-error: true #because xmlstarlet return 186 or 173 even if it's ok
 
 
       - name: Clean up
