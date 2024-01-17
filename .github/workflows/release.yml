@@ -77,16 +77,16 @@ jobs:
         run: > #replace carriage return by space
              xmlstarlet ed -P -L -i "//versions//version[1]" -t elem -n "version"
              -s "//versions/version[1]" -t elem -n "num" -v "${{ env.tag_name }}"
-             -s "//versions/version[1]" -t elem -n "compatibility" -v ">=${{ env.min_glpi_version }}<=${{ env.max_glpi_version }}"
+             -s "//versions/version[1]" -t elem -n "compatibility" -v ">=${{ env.min_glpi_version }} <=${{ env.max_glpi_version }}"
              -s "//versions/version[1]" -t elem -n "download_url" -v "https://github.com/pluginsGLPI/${{ github.event.repository.name }}/releases/download/${{ env.tag_name }}/glpi-${{ github.event.repository.name }}-${{ env.tag_name }}.tar.bz2" plugin.xml
 
       #####################################################################################
       ## Format 'plugin.xml'                                                             ##
-      ## --indent-spaces 3 -> indent with 3 spaces                                       ##
+      ## --indent-spaces 4 -> indent with 4 spaces                                       ##
       ## --encode utf-8    -> encode with utf-8                                          ##
       #####################################################################################
       - name: Format
-        run: xmlstarlet fo --indent-spaces 3 --encode utf-8 plugin.xml > format.xml
+        run: xmlstarlet fo --indent-spaces 4 --encode utf-8 plugin.xml > format.xml
 
       - name: Clean up
         run: |
@@ -95,23 +95,21 @@ jobs:
 
       - name: Check if files are well updated
         run: |
-             git status --porcelain | grep plugin.xml
-             git status --porcelain | grep setup.php
+             git status --porcelain | grep "M plugin.xml"
+             git status --porcelain | grep "M setup.php"
 
-  create-changelog:
-    name: "Create changelog"
-    runs-on: "ubuntu-latest"
-    needs: bump-version
-    steps:
-      - name: Check if files are well updated
-        run: |
-             git status --porcelain | grep plugin.xml
-             git status --porcelain | grep setup.php
+      - name: Changelog
+          uses: scottbrenner/generate-changelog-action@master
+          id: Changelog
+          with:
+            token: ${{ secrets.GITHUB_TOKEN }}
+            version: ${{ env.tag_name }}
+            #exclude: '^(docs|test|ci|build|release|chore|refactor|style|ci)(\(.+\))?!:'
 
   create-release:
     name: "Create release"
     runs-on: "ubuntu-latest"
-    needs: create-changelog
+    needs: bump-version
     steps:
       - name: "Extract Current Tag Name"
         run: echo "tag_name=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV

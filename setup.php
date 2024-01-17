@@ -45,6 +45,9 @@ define("PLUGIN_TAG_MAX_GLPI", "10.0.99");
  */
 function plugin_init_tag()
 {
+
+
+    
     /**
      * @var array $PLUGIN_HOOKS
      * @var array $UNINSTALL_TYPES
