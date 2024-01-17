@@ -93,17 +93,25 @@ jobs:
              rm -fr plugin.xml
              mv format.xml plugin.xml
 
-      - name: Check if file are updates
+      - name: Check if files are well updated
         run: |
              git status --porcelain | grep plugin.xml
              git status --porcelain | grep setup.php
-             git status --porcelain | grep states.php
 
+  create-changelog:
+    name: "Create release"
+    runs-on: "ubuntu-latest"
+    needs: bump-version
+     steps:
+      - name: Check if files are well updated
+        run: |
+             git status --porcelain | grep plugin.xml
+             git status --porcelain | grep setup.php
 
   create-release:
     name: "Create release"
     runs-on: "ubuntu-latest"
-    needs: bump-version
+    needs: create-changelog
     steps:
       - name: "Extract Current Tag Name"
         run: echo "tag_name=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
