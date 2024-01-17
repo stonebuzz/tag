@@ -36,7 +36,7 @@ jobs:
 
       #####################################################################################
       ## Extract some variables                                                          ##
-      ## REPO_NAME          -> plugin repo name (to UPPER CASE)             ex : TAG     ##
+      ## REPO_NAME          -> plugin repo name (UPPER CASE)                ex : TAG     ##
       ## tag_name           -> tag name                                     ex : 2.1.2   ##
       ## plugin_version     -> current plugin version define in 'setup.php' ex : 2.1.0   ##
       ## min_glpi_version   -> min glpi version define in 'setup.php'       ex : 10.0.0  ##
@@ -97,6 +97,7 @@ jobs:
         run: |
              git status --porcelain | grep plugin.xml
              git status --porcelain | grep setup.php
+             git status --porcelain | grep states.php
 
 
   create-release:
