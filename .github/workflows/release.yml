@@ -104,6 +104,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: display changes
+        run: echo ${{steps.github_release.outputs.changelog}}
 
   create-release:
     name: "Create release"
